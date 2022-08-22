@@ -37,7 +37,7 @@ public class CreateCourierTest {
         assertEquals("Status code is incorrect", SC_OK, loginStatusCode);
 
         courierId = loginResponse.extract().path("id");
-        assertNotNull("Login falied", courierId);
+        assertTrue("Login failed", courierId > 0);
     }
     @Test
     public void creationOfTwoCouriersFailedTest() {
@@ -54,7 +54,7 @@ public class CreateCourierTest {
         assertEquals("Status code is incorrect", SC_OK, loginStatusCode);
 
         courierId = loginResponse.extract().path("id");
-        assertNotNull("Login falied", courierId);
+        assertTrue("Login failed", courierId > 0);
 
         ValidatableResponse responseSecondCourier = courierClient.create(courier);
 

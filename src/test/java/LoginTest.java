@@ -1,13 +1,11 @@
-import io.qameta.allure.Step;
-import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class LoginTest {
     private Courier courier;
@@ -34,19 +32,17 @@ public class LoginTest {
         assertEquals("Status code is incorrect", SC_OK, loginStatusCode);
 
         courierId = loginResponse.extract().path("id");
-        assertNotNull("Login falied", courierId);
+        assertTrue("Login failed", courierId > 0);
     }
 
     @Test
     public void loginNonexistentCourierTest() {
-        courierClient.create(courier);
-
         ValidatableResponse loginResponse = courierClient.login(CourierCredentials.from(courier));
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Status code is incorrect", SC_OK, loginStatusCode);
+        assertEquals("Status code is incorrect", SC_NOT_FOUND, loginStatusCode);
 
-        courierId = loginResponse.extract().path("id");
-        assertNotNull("Login falied", courierId);
+        String message = loginResponse.extract().path("message");
+        assertEquals("Error message is not expected", CourierErrors.LOGIN_NOT_FOUND, message);
     }
 
 

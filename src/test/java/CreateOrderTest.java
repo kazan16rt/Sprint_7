@@ -5,8 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest {
@@ -46,7 +45,7 @@ public class CreateOrderTest {
         assertEquals("Status code is incorrect", SC_CREATED, statusCode);
 
         int track = response.extract().path("track");
-        assertNotNull("Track number is not received", track);
+        assertTrue("Track number is not received", track > 0);
     }
 
 }
